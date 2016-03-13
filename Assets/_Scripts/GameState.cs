@@ -7,11 +7,13 @@ public class GameState : MonoBehaviour {
 
     public void ResetGame()
     {
-        Application.LoadLevel("Main");
+        SceneLoader loader = GameObject.FindObjectOfType<SceneLoader>();
+        loader.LoadLevelByOffset(0);
     }
 
     public void BackToMenu()
     {
-        Application.LoadLevel("SplashScreen");
+        SceneLoader loader = GameObject.FindObjectOfType<SceneLoader>();
+        loader.LoadLevelByOffset(-1);
     }
 }

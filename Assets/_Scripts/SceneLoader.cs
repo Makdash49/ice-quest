@@ -17,6 +17,12 @@ public class SceneLoader : MonoBehaviour {
 
     public void LoadNextLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        LoadLevelByOffset(1);
+    }
+
+
+    public void LoadLevelByOffset(int indexOffset)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + indexOffset);
     }
 }

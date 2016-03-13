@@ -98,7 +98,6 @@
     <Compile Include="Assets\Cardboard\Scripts\VRDevices\UnityEditorDevice.cs" />
     <Compile Include="Assets\_Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\_Scripts\FireWall.cs" />
-    <Compile Include="Assets\_Scripts\GameLoader.cs" />
     <Compile Include="Assets\_Scripts\GameOverMessage.cs" />
     <Compile Include="Assets\_Scripts\GameState.cs" />
     <Compile Include="Assets\_Scripts\LethalCollider.cs" />
