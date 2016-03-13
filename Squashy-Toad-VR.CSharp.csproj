@@ -103,6 +103,7 @@
     <Compile Include="Assets\_Scripts\GameState.cs" />
     <Compile Include="Assets\_Scripts\LethalCollider.cs" />
     <Compile Include="Assets\_Scripts\Player.cs" />
+    <Compile Include="Assets\_Scripts\SceneLoader.cs" />
     <Compile Include="Assets\_Scripts\Spawner.cs" />
     <Compile Include="Assets\_Scripts\Vehicle.cs" />
     <Compile Include="Assets\_Scripts\VehicleSpawner.cs" />
