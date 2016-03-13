@@ -6,7 +6,7 @@ public class GameOverMessage : MonoBehaviour {
     public float UIDistance = 5.0f;
     public float UIHeight = 1.0f;
     private Canvas canvas;
-    private GameState state;
+    private LevelState state;
 
     private Player player;
 
@@ -15,7 +15,7 @@ public class GameOverMessage : MonoBehaviour {
         player = GameObject.FindObjectOfType<Player>();
         canvas = GetComponent<Canvas>();
         canvas.enabled = false;
-        state = GameObject.FindObjectOfType<GameState>();
+        state = GameObject.FindObjectOfType<LevelState>();
 
 	}
 	
