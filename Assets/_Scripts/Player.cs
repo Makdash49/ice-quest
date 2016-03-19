@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 
 	private void PullTrigger ()
 	{
-            RequestJump();
+            Jump();
 	}
 
     private void RequestJump()
@@ -34,17 +34,18 @@ public class Player : MonoBehaviour {
 
     private void Jump()
     {
-        if (!state.IsGameOver)
-        {
-            float jumpAngleInRadians = jumpAngleInDegree * Mathf.Deg2Rad;
-            Vector3 jumpVector = Vector3.RotateTowards(LookDirection(), Vector3.up, jumpAngleInRadians, 0);
-            rb.velocity = jumpVector * jumpSpeed;
-        } 
+
+		//transform.position = transform.position + head.Gaze.direction * 1000 * Time.deltaTime;
+
+		//transform.position = transform.position + Camera.main.transform.forward * distance * Time.deltaTime;
+
+		Vector3 jumpVector = Vector3.MoveTowards(head.Gaze.direction, Vector3.one, 0);
+         rb.velocity = jumpVector * jumpSpeed;
     }
 
     public Vector3 LookDirection()
     {
-        return Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.up);
+        return Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.one);
     }
 
     void OnCollisionStay(Collision collision)
