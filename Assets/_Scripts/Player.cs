@@ -34,11 +34,6 @@ public class Player : MonoBehaviour {
 
     private void Jump()
     {
-
-		//transform.position = transform.position + head.Gaze.direction * 1000 * Time.deltaTime;
-
-		//transform.position = transform.position + Camera.main.transform.forward * distance * Time.deltaTime;
-
 		Vector3 jumpVector = Vector3.MoveTowards(head.Gaze.direction, Vector3.one, 0);
          rb.velocity = jumpVector * jumpSpeed;
     }
