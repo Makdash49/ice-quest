@@ -8,7 +8,7 @@ public class Capsule : MonoBehaviour
     public float jumpAngleInDegree;
     public float jumpSpeed;
 
-    private CardboardHead head;
+    //private CardboardHead head;
     private Rigidbody rb;
     private bool onFloor;
     private float lastJumpRequestTime = 0.0f;
@@ -17,10 +17,11 @@ public class Capsule : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Cardboard.SDK.OnTrigger += PullTrigger;
-        head = GameObject.FindObjectOfType<CardboardHead>();
+        //Cardboard.SDK.OnTrigger += PullTrigger;
+        //head = GameObject.FindObjectOfType<CardboardHead>();
         rb = GetComponent<Rigidbody>();
         state = GameObject.FindObjectOfType<LevelState>();
+        //var camera = GetComponent<Camera>();
     }
 
     private void PullTrigger()
@@ -36,14 +37,14 @@ public class Capsule : MonoBehaviour
 
     private void Jump()
     {
-        Vector3 jumpVector = Vector3.MoveTowards(head.Gaze.direction, Vector3.one, 0);
-        rb.velocity = jumpVector * jumpSpeed;
+        //Vector3 jumpVector = Vector3.MoveTowards(head.Gaze.direction, Vector3.one, 0);
+        //rb.velocity = jumpVector * jumpSpeed;
     }
 
-    public Vector3 LookDirection()
-    {
-        return Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.one);
-    }
+    //public Vector3 LookDirection()
+    //{
+        //return Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.one);
+    //}
 
     void OnCollisionStay(Collision collision)
     {
@@ -60,5 +61,14 @@ public class Capsule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        rb = GetComponent<Rigidbody>();
+        state = GameObject.FindObjectOfType<LevelState>();
+        var camera = FindObjectOfType<Camera>();
+        var lookDirection = camera.transform.rotation * Vector3.forward;
+        if (Input.GetButtonDown("Tap"))
+        {
+            Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+            rb.velocity = jumpVector * jumpSpeed;
+        }
     }
 }
