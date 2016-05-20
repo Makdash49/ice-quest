@@ -61,12 +61,12 @@ public class Capsule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb = GetComponent<Rigidbody>();
-        state = GameObject.FindObjectOfType<LevelState>();
-        var camera = FindObjectOfType<Camera>();
-        var lookDirection = camera.transform.rotation * Vector3.forward;
         if (Input.GetButtonDown("Tap"))
         {
+            rb = GetComponent<Rigidbody>();
+            state = GameObject.FindObjectOfType<LevelState>();
+            var camera = FindObjectOfType<Camera>();
+            var lookDirection = camera.transform.rotation * Vector3.forward;
             Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
             rb.velocity = jumpVector * jumpSpeed;
         }
