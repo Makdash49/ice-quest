@@ -5,6 +5,7 @@ using System.Collections;
 public class BoxCollision : MonoBehaviour {
 
     public Text gazeText;
+    public int Count = 0;
 
     void OnCollisionEnter(Collision col)
     {
@@ -12,7 +13,8 @@ public class BoxCollision : MonoBehaviour {
         //renderer.material.color = new Color(0.5f,1,1);
         GetComponent<Renderer>().material.color = new Color(0.5f, 1, 1);
 
-        gazeText.text = "Collision!!!";
+        Count = Count + 1;
+        gazeText.text = Count.ToString();
 
     }
 }
