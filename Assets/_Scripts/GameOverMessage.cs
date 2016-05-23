@@ -14,7 +14,7 @@ public class GameOverMessage : MonoBehaviour {
 	void Start () {
         player = GameObject.FindObjectOfType<Player>();
         canvas = GetComponent<Canvas>();
-        canvas.enabled = false;
+        //canvas.enabled = false;
         state = GameObject.FindObjectOfType<LevelState>();
 
 	}
