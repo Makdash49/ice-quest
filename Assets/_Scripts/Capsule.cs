@@ -58,6 +58,12 @@ public class Capsule : MonoBehaviour
 
     }
 
+    public Vector3 GazeDirection()
+    {
+        var camera = FindObjectOfType<Camera>();
+        return camera.transform.rotation * Vector3.forward;
+    }
+
 
     // Update is called once per frame
     void Update()
