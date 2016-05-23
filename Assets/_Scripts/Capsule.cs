@@ -13,6 +13,7 @@ public class Capsule : MonoBehaviour
     private bool onFloor;
     private float lastJumpRequestTime = 0.0f;
     private LevelState state;
+    public int count = 0;
 
     // Use this for initialization
     void Start()
