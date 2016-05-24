@@ -26,6 +26,12 @@ public class Capsule : MonoBehaviour
         //var camera = GetComponent<Camera>();
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        jumpSpeed = 1.5f;
+        tapcount = 1.0f;
+    }
+
     private void PullTrigger()
     {
         Jump();
