@@ -14,7 +14,7 @@ public class Capsule : MonoBehaviour
     private float lastJumpRequestTime = 0.0f;
     private LevelState state;
     public int count = 0;
-    public int tapcount = 1;
+    public float tapcount = 1.0f;
 
     // Use this for initialization
     void Start()
@@ -77,7 +77,7 @@ public class Capsule : MonoBehaviour
             var lookDirection = camera.transform.rotation * Vector3.forward;
             Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
             rb.velocity = jumpVector * jumpSpeed * tapcount;
-            tapcount += 1;
+            tapcount += .10f;
         }
     }
 }
