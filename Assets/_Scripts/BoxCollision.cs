@@ -2,16 +2,21 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class BoxCollision : MonoBehaviour {
 
     public Text gazeText;
     public Capsule cap;
     public bool found = false;
+    public AudioClip impact;
+    AudioSource audio;
 
 
     void Start()
     {
         cap = FindObjectOfType<Capsule>();
+        audio = GetComponent<AudioSource>();
+
 
     }
 
@@ -26,6 +31,7 @@ public class BoxCollision : MonoBehaviour {
             found = true;
             cap.count = cap.count + 1;
             gazeText.text = cap.count.ToString() + " of 10";
+            audio.PlayOneShot(impact, 0.7F);
         }
 
     }
