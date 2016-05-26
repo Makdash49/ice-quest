@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class Capsule : MonoBehaviour
 {
 
@@ -16,6 +17,10 @@ public class Capsule : MonoBehaviour
     public int count = 0;
     public float tapcount = 1.0f;
 
+    public AudioClip impact;
+    AudioSource audio;
+
+
     // Use this for initialization
     void Start()
     {
@@ -24,13 +29,18 @@ public class Capsule : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         state = GameObject.FindObjectOfType<LevelState>();
         //var camera = GetComponent<Camera>();
-    }
+        audio = GetComponent<AudioSource>();
+        Debug.Log("Helloooooooooooooooooooooooooooo");
+        Debug.Log(audio);
+        Debug.Log("Helloooooooooooooooooooooooooooo");
+}
 
     void OnCollisionEnter(Collision col)
     {
         jumpSpeed = 1.0f;
         tapcount = 1.0f;
-    }
+        audio.PlayOneShot(impact, 0.7F);
+}
 
     private void PullTrigger()
     {
