@@ -28,7 +28,7 @@ public class Capsule : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        jumpSpeed = 1.5f;
+        jumpSpeed = 1.0f;
         tapcount = 1.0f;
     }
 
