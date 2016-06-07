@@ -8,6 +8,8 @@ public class Capsule : MonoBehaviour
 
     public float jumpAngleInDegree;
     public float jumpSpeed;
+    public AudioClip impact;
+    AudioSource audio;
 
     //private CardboardHead head;
     private Rigidbody rb;
@@ -16,9 +18,6 @@ public class Capsule : MonoBehaviour
     private LevelState state;
     public int count = 0;
     public float tapcount = 1.0f;
-
-    public AudioClip impact;
-    AudioSource audio;
 
 
     // Use this for initialization
@@ -30,9 +29,6 @@ public class Capsule : MonoBehaviour
         state = GameObject.FindObjectOfType<LevelState>();
         //var camera = GetComponent<Camera>();
         audio = GetComponent<AudioSource>();
-        Debug.Log("Helloooooooooooooooooooooooooooo");
-        Debug.Log(audio);
-        Debug.Log("Helloooooooooooooooooooooooooooo");
 }
 
     void OnCollisionEnter(Collision col)
