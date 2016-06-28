@@ -1,2 +1,6 @@
 Base path: C:/Program Files/UnityVR5.3.3f1/Editor/Data
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=1569 outsize=649 ok=1
+Cmd: preprocess
+  insize=336 outsize=336 ok=1
