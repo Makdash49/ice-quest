@@ -2,14 +2,14 @@
 
 Copyright   :   Copyright 2014 Oculus VR, LLC. All Rights reserved.
 
-Licensed under the Oculus VR Rift SDK License Version 3.3 (the "License");
+Licensed under the Oculus VR Rift SDK License Version 3.2 (the "License");
 you may not use the Oculus VR Rift SDK except in compliance with the License,
 which is provided at the time of installation or download, or which
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculus.com/licenses/LICENSE-3.3
+http://www.oculusvr.com/licenses/LICENSE-3.2
 
 Unless required by applicable law or agreed to in writing, the Oculus VR SDK
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,32 +20,17 @@ limitations under the License.
 ************************************************************************************/
 
 using UnityEngine;
-using VR = UnityEngine.VR;
 using System.Collections;
 
-/// <summary>
-/// Shows the Oculus plaform UI.
-/// </summary>
 public class OVRPlatformMenu : MonoBehaviour
 {
-	/// <summary>
-	/// A timer that appears at the gaze cursor before a platform UI transition.
-	/// </summary>
 	public GameObject cursorTimer;
-
-	/// <summary>
-	/// The current color of the cursor timer.
-	/// </summary>
 	public Color cursorTimerColor = new Color(0.0f, 0.643f, 1.0f, 1.0f);	// set default color to same as native cursor timer
-
-	/// <summary>
-	/// The distance at which the cursor timer appears.
-	/// </summary>
+	public OVRCameraRig cameraRig = null;
 	public float fixedDepth = 3.0f;
 
 	private GameObject instantiatedCursorTimer = null;
 	private Material cursorTimerMaterial = null;
-	private float doubleTapDelay = 0.25f;
 	private float shortPressDelay = 0.25f;
 	private float longPressDelay = 0.75f;
 
@@ -57,17 +42,17 @@ public class OVRPlatformMenu : MonoBehaviour
 		LONG_PRESS
 	};
 
-	private int downCount = 0;
-	private int upCount = 0;
-	private float initialDownTime = -1.0f;
-	private bool waitForUp = false;
+	private int     downCount = 0;
+	private float 	initialDownTime = -1.0f;
+	private float   timerTime = -1.0f;
+	private bool 	waitForUp = false;
 
 	eBackButtonAction ResetAndSendAction( eBackButtonAction action )
 	{
 		print( "ResetAndSendAction( " + action + " );" );
 		downCount = 0;
-		upCount = 0;
 		initialDownTime = -1.0f;
+        timerTime = -1.0f;
 		waitForUp = false;
 		ResetCursor();
 		if ( action == eBackButtonAction.LONG_PRESS )
@@ -93,73 +78,66 @@ public class OVRPlatformMenu : MonoBehaviour
 			}
 		}
 
-		if ( Input.GetKeyDown( KeyCode.Escape ) )
+        float timeSinceInitialDown = -1.0f;
+        if ( downCount > 0 )
+        {
+            timeSinceInitialDown = Time.realtimeSinceStartup - initialDownTime;
+        }
+
+		if ( Input.GetKeyDown( KeyCode.Escape ) ) // only returns true on the frame that the key was pressed
 		{
-			// just came down
+            // just came down
 			downCount++;
 			if ( downCount == 1 )
 			{
+                // initial down
 				initialDownTime = Time.realtimeSinceStartup;
+                timerTime = -1.0f;
 			}
 		}
-		else if ( downCount > 0 )
-		{
-			if ( Input.GetKey( KeyCode.Escape ) )
-			{
-				if ( downCount <= upCount )
-				{
-					// just went down
-					downCount++;
-				}
-
-				float timeSinceFirstDown = Time.realtimeSinceStartup - initialDownTime;
-				if ( timeSinceFirstDown > shortPressDelay )
-				{
-					// The gaze cursor timer should start unfilled once short-press time is exceeded
-					// then fill up completely, so offset the times by the short-press delay.
-					float t = ( timeSinceFirstDown - shortPressDelay ) / ( longPressDelay - shortPressDelay );
-					UpdateCursor( t );
-				}
-
-				if ( timeSinceFirstDown > longPressDelay )
-				{
-					return ResetAndSendAction( eBackButtonAction.LONG_PRESS );
-				}
-			}
-			else
-			{
-				bool started = initialDownTime >= 0.0f;
-				if ( started )
-				{
-					if ( upCount < downCount )
-					{
-						// just came up
-						upCount++;
-					}
-
-					float timeSinceFirstDown = Time.realtimeSinceStartup - initialDownTime;
-					if ( timeSinceFirstDown < doubleTapDelay )
-					{
-						if ( downCount == 2 && upCount == 2 )
-						{
-							return ResetAndSendAction( eBackButtonAction.DOUBLE_TAP );
-						}
-					}
-					else if ( timeSinceFirstDown > shortPressDelay )
-					{
-						if ( downCount == 1 && upCount == 1 )
-						{
-							return ResetAndSendAction( eBackButtonAction.SHORT_PRESS );
-						}
-					}
-					else if ( timeSinceFirstDown < longPressDelay )
-					{
-						// this is an abort of a long press after short-press delay has passed
-						return ResetAndSendAction( eBackButtonAction.NONE );
-					}
-				}
-			}
-		}
+        else if ( Input.GetKey( KeyCode.Escape ) )
+        {
+            // key is being held
+            if ( timeSinceInitialDown > shortPressDelay )
+            {
+				// The gaze cursor timer should start unfilled once short-press time is exceeded
+				// then fill up completely, so offset the times by the short-press delay.
+				timerTime = ( timeSinceInitialDown - shortPressDelay ) / ( longPressDelay - shortPressDelay );
+				UpdateCursor( timerTime );
+            }
+            if ( timeSinceInitialDown > longPressDelay )
+            {
+                // long-press time expired while holding, so issue a long-press
+                // print( "Long-press: timeSinceInitialDown = " + timeSinceInitialDown + ", downCount = " + downCount );
+                return ResetAndSendAction( eBackButtonAction.LONG_PRESS );
+            }
+        }
+        else if ( downCount > 0 )
+        {
+            // key is up
+            if ( timerTime >= 0.0f )
+            {
+                // any key up after the short-press delay has passed is an abort of a long-press
+                // print( "Abort: timeSinceInitialDown = " + timeSinceInitialDown + ", downCount = " + downCount );
+                return ResetAndSendAction( eBackButtonAction.NONE );
+            }
+            else if ( timeSinceInitialDown >= shortPressDelay )
+            {
+                timerTime = ( timeSinceInitialDown - shortPressDelay ) / ( longPressDelay - shortPressDelay );
+                if ( downCount == 1 )   
+                {
+                    // key only went down once, this is a short-press
+					// print( "Short-press: timeSinceInitialDown = " + timeSinceInitialDown + ", downCount = " + downCount );
+					return ResetAndSendAction( eBackButtonAction.SHORT_PRESS );
+                }
+                else if ( downCount == 2 )
+                {
+                    // key went down twice, this is a double-tap
+					// print( "double-tap: timeSinceInitialDown = " + timeSinceInitialDown + ", downCount = " + downCount );
+					return ResetAndSendAction( eBackButtonAction.DOUBLE_TAP );
+                }
+            }
+        }
 
 		// down reset, but perform no action
 		return eBackButtonAction.NONE;
@@ -170,8 +148,9 @@ public class OVRPlatformMenu : MonoBehaviour
 	/// </summary>
 	void Awake()
 	{
-		if (!OVRManager.isHmdPresent)
+		if (cameraRig == null)
 		{
+			Debug.LogError ("ERROR: missing camera controller object on " + name);
 			enabled = false;
 			return;
 		}
