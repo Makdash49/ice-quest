@@ -97,7 +97,10 @@ public class Capsule : MonoBehaviour
         {
             rb = GetComponent<Rigidbody>();
             rb.velocity = jumpVector * jumpSpeed * tapcount;
-            tapcount += .10f;
+            if (angle < 10)
+            {
+                tapcount += 1f;
+            }
             previousJumpVector = jumpVector;
         }
     }
