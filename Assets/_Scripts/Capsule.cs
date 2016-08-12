@@ -19,6 +19,8 @@ public class Capsule : MonoBehaviour
     public int count = 0;
     public float tapcount = 1.0f;
 
+    Vector3 previousJumpVector = Vector3.forward;
+
 
     // Use this for initialization
     void Start()
@@ -81,15 +83,19 @@ public class Capsule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var camera = FindObjectOfType<Camera>();
+        var lookDirection = camera.transform.rotation * Vector3.forward;
+        Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+        Debug.Log("previousJumpVector:");
+        Debug.Log(previousJumpVector);
+        Debug.Log("JumpVector:");
+        Debug.Log(jumpVector);
         if (Input.GetButtonDown("Tap"))
         {
             rb = GetComponent<Rigidbody>();
-            state = GameObject.FindObjectOfType<LevelState>();
-            var camera = FindObjectOfType<Camera>();
-            var lookDirection = camera.transform.rotation * Vector3.forward;
-            Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
             rb.velocity = jumpVector * jumpSpeed * tapcount;
             tapcount += .10f;
+            previousJumpVector = jumpVector;
         }
     }
 }
