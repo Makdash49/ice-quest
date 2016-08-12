@@ -87,16 +87,19 @@ public class Capsule : MonoBehaviour
         var lookDirection = camera.transform.rotation * Vector3.forward;
         if (Input.GetButtonDown("Tap"))
         {
-            Debug.Log("**************************************** Tap ***********************************");
             Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
             float angle = Vector3.Angle(previousJumpVector, jumpVector);
             rb = GetComponent<Rigidbody>();
             rb.velocity = jumpVector * jumpSpeed * tapcount;
             if (angle < 10)
             {
-                tapcount += 2f;
-                rb.velocity = jumpVector * jumpSpeed * tapcount;
+                tapcount += .4f;
             }
+            if (angle > 80)
+            {
+                tapcount = 1;
+            }
+            rb.velocity = jumpVector * jumpSpeed * tapcount;
             previousJumpVector = jumpVector;
         }
     }
