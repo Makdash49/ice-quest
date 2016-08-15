@@ -108,8 +108,13 @@ public class Capsule : MonoBehaviour
             Debug.Log("timeAtButtonUp");
             Debug.Log(timeAtButtonUp);
 
-            if (timeAtButtonUp - timeAtButtonDown < .5f)
+            if (timeAtButtonUp - timeAtButtonDown < .15f)
             {
+                if (tapcount < 1f)
+                {
+                    tapcount = 1f;
+                }
+
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 float angle = Vector3.Angle(previousJumpVector, jumpVector);
                 rb = GetComponent<Rigidbody>();
@@ -128,7 +133,7 @@ public class Capsule : MonoBehaviour
             else
             {
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
-                tapcount -= .4f;
+                tapcount -= .6f;
 
                 if (tapcount < 0f)
                 {
