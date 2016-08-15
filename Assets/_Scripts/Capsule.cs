@@ -130,12 +130,12 @@ public class Capsule : MonoBehaviour
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 tapcount -= .4f;
 
-                if (tapcount < 1.0f)
+                if (tapcount < 0f)
                 {
                     tapcount = 0f;
                 }
 
-                rb.velocity = jumpVector * jumpSpeed * tapcount;
+                rb.velocity = previousJumpVector * jumpSpeed * tapcount;
             }
 
         }   
