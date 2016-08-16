@@ -108,7 +108,7 @@ public class Capsule : MonoBehaviour
             Debug.Log("timeAtButtonUp");
             Debug.Log(timeAtButtonUp);
 
-            if (timeAtButtonUp - timeAtButtonDown < .15f)
+            if (timeAtButtonUp - timeAtButtonDown < .25f)
             {
                 if (tapcount < 1f)
                 {
