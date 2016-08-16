@@ -101,6 +101,38 @@ public class Capsule : MonoBehaviour
             Debug.Log(timeAtButtonDown);
         }
 
+        if (Input.GetButton("Tap"))
+        {
+            timeCurrent = Time.fixedTime;
+
+            if (timeCurrent - timeAtButtonDown >= .5f)
+            {
+                tapcount -= .025f;
+                if (tapcount < 0)
+                {
+                    tapcount = 0;
+                }
+                Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+                rb.velocity = previousJumpVector * jumpSpeed * tapcount;
+            }
+
+            //if (timeCurrent - timeAtButtonDown >= 1f)
+            //{
+            //    Debug.Log("Time's a wastin'!");
+            //}
+            //Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+            //tapcount -= .6f;
+
+            //if (tapcount < 0f)
+            //{
+            //    tapcount = 0f;
+            //}
+
+            //rb.velocity = previousJumpVector * jumpSpeed * tapcount;
+
+        }
+
+
         if (Input.GetButtonUp("Tap"))
         {
             timeCurrent = Time.fixedTime;
@@ -108,7 +140,7 @@ public class Capsule : MonoBehaviour
             Debug.Log("timeAtButtonUp");
             Debug.Log(timeAtButtonUp);
 
-            if (timeAtButtonUp - timeAtButtonDown < .15f)
+            if (timeAtButtonUp - timeAtButtonDown < .5f)
             {
                 if (tapcount < 1f)
                 {
@@ -130,19 +162,6 @@ public class Capsule : MonoBehaviour
                 rb.velocity = jumpVector * jumpSpeed * tapcount;
                 previousJumpVector = jumpVector;
             }
-            else
-            {
-                Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
-                tapcount -= .6f;
-
-                if (tapcount < 0f)
-                {
-                    tapcount = 0f;
-                }
-
-                rb.velocity = previousJumpVector * jumpSpeed * tapcount;
-            }
-
         }   
     }
 }
