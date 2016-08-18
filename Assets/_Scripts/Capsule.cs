@@ -112,7 +112,7 @@ public class Capsule : MonoBehaviour
                 {
                     tapcount = 0;
                 }
-                Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+                //Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 rb.velocity = previousJumpVector * jumpSpeed * tapcount;
             }
 
@@ -150,7 +150,7 @@ public class Capsule : MonoBehaviour
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 float angle = Vector3.Angle(previousJumpVector, jumpVector);
                 rb = GetComponent<Rigidbody>();
-                rb.velocity = jumpVector * jumpSpeed * tapcount;
+                //rb.velocity = jumpVector * jumpSpeed * tapcount;
                 if (angle < 10)
                 {
                     tapcount += .4f;
