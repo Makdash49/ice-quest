@@ -92,10 +92,10 @@ public class Capsule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (tapcount < 0)
+        if (tapcount <= 0)
         {
-            slowingDown = false;
             tapcount = 0;
+            slowingDown = false;
         }
 
         var camera = FindObjectOfType<Camera>();
@@ -141,30 +141,48 @@ public class Capsule : MonoBehaviour
 
             if (timeAtButtonUp - timeAtButtonDown < .5f)
             {
-                if (tapcount < 1f)
-                {
-                    tapcount = 1f;
-                }
+                //if (tapcount < 1f)
+                //{
+                //    tapcount = 1f;
+                //}
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 float angle = Vector3.Angle(previousJumpVector, jumpVector);
                 rb = GetComponent<Rigidbody>();
-                //rb.velocity = jumpVector * jumpSpeed * tapcount;
+
                 if (angle < 10)
                 {
+                    if (tapcount < 1f)
+                    {
+                        tapcount = 1f;
+                    }
                     tapcount += .4f;
                     rb.velocity = jumpVector * jumpSpeed * tapcount;
                     previousJumpVector = jumpVector;
                 }
                 if (angle >= 10 && angle <= 80)
                 {
+                    if (tapcount < 1f)
+                    {
+                        tapcount = 1f;
+                    }
                     rb.velocity = jumpVector * jumpSpeed * tapcount;
                     previousJumpVector = jumpVector;
                 }
-                if (angle > 80)
+                if (angle > 80 && tapcount != 0)
                 {
+                    if (tapcount < 1f)
+                    {
+                        tapcount = 1f;
+                    }
                     slowingDown = true;
                     previousPreviousJumpVector = previousJumpVector;
                     previousJumpVector = jumpVector;
+                }
+
+                if (angle > 80 && tapcount == 0)
+                {
+                    tapcount = 1;
+                    rb.velocity = jumpVector * jumpSpeed * tapcount;
                 }
 
             }
