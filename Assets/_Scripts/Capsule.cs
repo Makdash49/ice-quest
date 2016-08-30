@@ -91,6 +91,11 @@ public class Capsule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (tapcount <= 0)
+        {
+            tapcount = 0;
+        }
+
         var camera = FindObjectOfType<Camera>();
         var lookDirection = camera.transform.rotation * Vector3.forward;
 
@@ -98,12 +103,12 @@ public class Capsule : MonoBehaviour
         {
             tapcount -= .050f;
             rb = GetComponent<Rigidbody>();
-            //Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
             rb.velocity = previousJumpVector * jumpSpeed * tapcount;
         } 
 
         if (Input.GetButtonDown("Tap"))
         {
+            slowingDown = false;
             timeCurrent = Time.fixedTime;
             timeAtButtonDown = timeCurrent;
             Debug.Log("timeAtButtonDown");
