@@ -103,21 +103,20 @@ public class Capsule : MonoBehaviour
 
         if (slowingDown == true)
         {
-            tapcount -= .050f;
+            tapcount -= .1f;
             rb = GetComponent<Rigidbody>();
             rb.velocity = previousPreviousJumpVector * jumpSpeed * tapcount;
         } 
 
-        if (Input.GetButtonDown("Tap"))
+        if (Input.GetButtonDown("Tap")  && slowingDown == false)
         {
-            slowingDown = false;
             timeCurrent = Time.fixedTime;
             timeAtButtonDown = timeCurrent;
             Debug.Log("timeAtButtonDown");
             Debug.Log(timeAtButtonDown);
         }
 
-        if (Input.GetButton("Tap"))
+        if (Input.GetButton("Tap") && slowingDown == false)
         {
             timeCurrent = Time.fixedTime;
 
@@ -128,12 +127,12 @@ public class Capsule : MonoBehaviour
                 {
                     tapcount = 0;
                 }
-                Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+                //Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 rb.velocity = previousJumpVector * jumpSpeed * tapcount;
             }
         }
 
-        if (Input.GetButtonUp("Tap"))
+        if (Input.GetButtonUp("Tap") && slowingDown == false)
         {
             timeCurrent = Time.fixedTime;
             timeAtButtonUp = timeCurrent;
