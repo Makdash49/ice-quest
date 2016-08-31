@@ -19,6 +19,8 @@ public class Capsule : MonoBehaviour
     public int count = 0;
     public float tapcount = 1.0f;
 
+
+    Vector3 jumpVector = Vector3.forward;
     Vector3 previousJumpVector = Vector3.forward;
     Vector3 previousPreviousJumpVector = Vector3.forward;
 
@@ -29,6 +31,7 @@ public class Capsule : MonoBehaviour
     float timeButtonHeld = 0;
     bool draggable = false;
     bool slowingDown = false;
+    bool speedingUp = false;
 
 
     // Use this for initialization
@@ -108,10 +111,25 @@ public class Capsule : MonoBehaviour
             {
                 tapcount = 0;
                 slowingDown = false;
+                speedingUp = true;
             }
             rb = GetComponent<Rigidbody>();
             rb.velocity = previousPreviousJumpVector * jumpSpeed * tapcount;
-        } 
+        }
+
+        if (speedingUp == true)
+        {
+            tapcount += .1f;
+            rb = GetComponent<Rigidbody>();
+            rb.velocity = jumpVector * jumpSpeed * tapcount;
+            if (tapcount >= 1.0f)
+            {
+                tapcount = 1.0f;
+                speedingUp = false;
+            }
+        }
+
+
 
         if (Input.GetButtonDown("Tap") && slowingDown == false)
         {
@@ -149,7 +167,7 @@ public class Capsule : MonoBehaviour
                 {
                    tapcount = 0f;
                 }
-                Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+                jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 float angle = Vector3.Angle(previousJumpVector, jumpVector);
                 rb = GetComponent<Rigidbody>();
 
