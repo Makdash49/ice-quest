@@ -132,7 +132,6 @@ public class Capsule : MonoBehaviour
                 {
                     tapcount = 0;
                 }
-                //Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 rb.velocity = previousJumpVector * jumpSpeed * tapcount;
             }
         }
@@ -188,6 +187,7 @@ public class Capsule : MonoBehaviour
                 {
                     tapcount = 1;
                     rb.velocity = jumpVector * jumpSpeed * tapcount;
+                    previousJumpVector = jumpVector;
                 }
 
             }
