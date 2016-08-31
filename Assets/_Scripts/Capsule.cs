@@ -159,9 +159,9 @@ public class Capsule : MonoBehaviour
                     {
                         tapcount = 1f;
                     }
+                    tapcount += .4f;
                     rb.velocity = jumpVector * jumpSpeed * tapcount;
                     previousJumpVector = jumpVector;
-                    tapcount += .4f;
                 }
                 if (angle >= 10 && angle <= 80)
                 {
