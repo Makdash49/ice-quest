@@ -89,7 +89,7 @@ public class Capsule : MonoBehaviour
     }
 
 
-    // Update is called once per frame
+    // Update is called once per frame *********************************************************************************************************************************************************************
     void Update()
     {
         if (tapcount <= 0)
@@ -104,11 +104,16 @@ public class Capsule : MonoBehaviour
         if (slowingDown == true)
         {
             tapcount -= .1f;
+            if (tapcount < 0)
+            {
+                tapcount = 0;
+                slowingDown = false;
+            }
             rb = GetComponent<Rigidbody>();
             rb.velocity = previousPreviousJumpVector * jumpSpeed * tapcount;
         } 
 
-        if (Input.GetButtonDown("Tap")  && slowingDown == false)
+        if (Input.GetButtonDown("Tap") && slowingDown == false)
         {
             timeCurrent = Time.fixedTime;
             timeAtButtonDown = timeCurrent;
@@ -141,10 +146,10 @@ public class Capsule : MonoBehaviour
 
             if (timeAtButtonUp - timeAtButtonDown < .5f)
             {
-                //if (tapcount < 1f)
-                //{
-                //    tapcount = 1f;
-                //}
+                if (tapcount < 0f)
+                {
+                   tapcount = 0f;
+                }
                 Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
                 float angle = Vector3.Angle(previousJumpVector, jumpVector);
                 rb = GetComponent<Rigidbody>();
@@ -155,9 +160,9 @@ public class Capsule : MonoBehaviour
                     {
                         tapcount = 1f;
                     }
-                    tapcount += .4f;
                     rb.velocity = jumpVector * jumpSpeed * tapcount;
                     previousJumpVector = jumpVector;
+                    tapcount += .4f;
                 }
                 if (angle >= 10 && angle <= 80)
                 {
@@ -170,9 +175,9 @@ public class Capsule : MonoBehaviour
                 }
                 if (angle > 80 && tapcount != 0)
                 {
-                    if (tapcount < 1f)
+                    if (tapcount < 0f)
                     {
-                        tapcount = 1f;
+                        tapcount = 0f;
                     }
                     slowingDown = true;
                     previousPreviousJumpVector = previousJumpVector;
