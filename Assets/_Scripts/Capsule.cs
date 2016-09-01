@@ -20,6 +20,20 @@ public class Capsule : MonoBehaviour
     public float tapcount = 1.0f;
 
 
+    Vector3 jumpVector = Vector3.forward;
+    Vector3 previousJumpVector = Vector3.forward;
+    Vector3 previousPreviousJumpVector = Vector3.forward;
+
+
+    float timeCurrent;
+    float timeAtButtonDown;
+    float timeAtButtonUp;
+    float timeButtonHeld = 0;
+    bool draggable = false;
+    bool slowingDown = false;
+    bool speedingUp = false;
+
+
     // Use this for initialization
     void Start()
     {
@@ -78,18 +92,123 @@ public class Capsule : MonoBehaviour
     }
 
 
-    // Update is called once per frame
+    // Update is called once per frame *********************************************************************************************************************************************************************
     void Update()
     {
-        if (Input.GetButtonDown("Tap"))
+        if (tapcount <= 0)
         {
-            rb = GetComponent<Rigidbody>();
-            state = GameObject.FindObjectOfType<LevelState>();
-            var camera = FindObjectOfType<Camera>();
-            var lookDirection = camera.transform.rotation * Vector3.forward;
-            Vector3 jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
-            rb.velocity = jumpVector * jumpSpeed * tapcount;
-            tapcount += .10f;
+            tapcount = 0;
+            slowingDown = false;
         }
+
+        var camera = FindObjectOfType<Camera>();
+        var lookDirection = camera.transform.rotation * Vector3.forward;
+
+        if (slowingDown == true)
+        {
+            tapcount -= .1f;
+            if (tapcount < 0)
+            {
+                tapcount = 0;
+                slowingDown = false;
+                speedingUp = true;
+            }
+            rb = GetComponent<Rigidbody>();
+            rb.velocity = previousPreviousJumpVector * jumpSpeed * tapcount;
+        }
+
+        if (speedingUp == true)
+        {
+            tapcount += .1f;
+            rb = GetComponent<Rigidbody>();
+            rb.velocity = jumpVector * jumpSpeed * tapcount;
+            if (tapcount >= 1.0f)
+            {
+                tapcount = 1.0f;
+                speedingUp = false;
+            }
+        }
+
+
+
+        if (Input.GetButtonDown("Tap") && slowingDown == false)
+        {
+            timeCurrent = Time.fixedTime;
+            timeAtButtonDown = timeCurrent;
+            Debug.Log("timeAtButtonDown");
+            Debug.Log(timeAtButtonDown);
+        }
+
+        if (Input.GetButton("Tap") && slowingDown == false)
+        {
+            timeCurrent = Time.fixedTime;
+
+            if (timeCurrent - timeAtButtonDown >= .5f)
+            {
+                tapcount -= .025f;
+                if (tapcount < 0)
+                {
+                    tapcount = 0;
+                }
+                rb.velocity = previousJumpVector * jumpSpeed * tapcount;
+            }
+        }
+
+        if (Input.GetButtonUp("Tap") && slowingDown == false)
+        {
+            timeCurrent = Time.fixedTime;
+            timeAtButtonUp = timeCurrent;
+            Debug.Log("timeAtButtonUp");
+            Debug.Log(timeAtButtonUp);
+
+            if (timeAtButtonUp - timeAtButtonDown < .5f)
+            {
+                if (tapcount < 0f)
+                {
+                   tapcount = 0f;
+                }
+                jumpVector = Vector3.MoveTowards(lookDirection, Vector3.one, 0);
+                float angle = Vector3.Angle(previousJumpVector, jumpVector);
+                rb = GetComponent<Rigidbody>();
+
+                if (angle < 10)
+                {
+                    if (tapcount < 1f)
+                    {
+                        tapcount = 1f;
+                    }
+                    tapcount += .4f;
+                    rb.velocity = jumpVector * jumpSpeed * tapcount;
+                    previousJumpVector = jumpVector;
+                }
+                if (angle >= 10 && angle <= 80)
+                {
+                    if (tapcount < 1f)
+                    {
+                        tapcount = 1f;
+                    }
+                    rb.velocity = jumpVector * jumpSpeed * tapcount;
+                    previousJumpVector = jumpVector;
+                }
+                if (angle > 80 && tapcount != 0)
+                {
+                    if (tapcount < 0f)
+                    {
+                        tapcount = 0f;
+                    }
+                    slowingDown = true;
+                    previousPreviousJumpVector = previousJumpVector;
+                    previousJumpVector = jumpVector;
+                }
+
+                if (angle > 80 && tapcount == 0)
+                {
+                    tapcount = 1;
+                    rb.velocity = jumpVector * jumpSpeed * tapcount;
+                    previousJumpVector = jumpVector;
+                }
+
+            }
+        }   
     }
 }
